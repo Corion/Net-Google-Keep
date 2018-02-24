@@ -3,6 +3,7 @@ use strict;
 use WWW::Mechanize::Chrome;
 use Data::Dumper;
 use Log::Log4perl qw(:easy);
+use Future::HTTP;
 Log::Log4perl->easy_init($ERROR);  # Set priority of root logger to ERROR
 
 my $chrome_default;
@@ -37,11 +38,11 @@ my $urls = $m->add_listener('Network.responseReceived', sub {
     my( $info ) = @_;
     my $url = $info->{params}->{response}->{url};
     my $id = $info->{params}->{requestId};
-    
+
     return unless $url =~ /\bclients\d\.google\.com\b/;
     return unless $url =~ m!/notes/!;
     return unless $url =~ /\bchanges\?alt=json\b/;
-    
+
     if( ! $seen{$id}++) {
         print "$id> $url\n";
 
@@ -53,17 +54,17 @@ my $urls = $m->add_listener('Network.responseReceived', sub {
         # I guess we don't even need to do this in an .responseReceived
         # handler and can just do it in a .requestSent handler instead.
         $urls{ $url } ||= [];
-        
+
         my $req = {
             info => $info,
             postBody => [],
         };
-        
+
         if( $info->{params}->{response}->{requestHeaders}->{":method"} eq 'POST' ) {
             $req->{postBody} = $m->getRequestPostData( $id );
         };
         push @{ $urls{ $url }}, $req;
-        
+
         #$urls{ $url } = $m->getResponseBody( $id )->then( sub {
         #    print Dumper $_[0];
         #    print "---";
@@ -101,7 +102,6 @@ for my $req (@{ $urls{ $url }}) {
     print "---\n";
     
     # Now replay this from a different UA:
-    use Future::HTTP;
     my $ua = Future::HTTP->new();
     my %headers = %{ $req->{info}->{params}->{response}->{requestHeaders} };
     delete $headers{ $_ } for grep { /^:/ }keys %headers;
