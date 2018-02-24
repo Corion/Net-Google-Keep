@@ -22,7 +22,9 @@ if( $^O =~ /mswin/i ) {
 
 my $m = WWW::Mechanize::Chrome->new(
     launch_exe => $chrome_default,
+    #headless   => 1,
 );
+$m->agent( 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3346.0 Safari/537.36' );
 
 my %urls;
 my %seen;
