@@ -95,6 +95,7 @@ $m->sleep(5);
 # replay that:
 (my $url) = keys( %urls );
 
+my $ua = Future::HTTP->new();
 for my $req (@{ $urls{ $url }}) {
     print $req->{ postBody } = $req->{ postBody }->get();
     print "\n";
@@ -102,7 +103,6 @@ for my $req (@{ $urls{ $url }}) {
     print "---\n";
     
     # Now replay this from a different UA:
-    my $ua = Future::HTTP->new();
     my %headers = %{ $req->{info}->{params}->{response}->{requestHeaders} };
     delete $headers{ $_ } for grep { /^:/ }keys %headers;
     print "$url\n";
