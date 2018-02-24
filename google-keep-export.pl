@@ -124,6 +124,7 @@ for my $req (@{ $urls{ $url }}) {
 
 undef $m;
 
+# Code taken from HTTP::Message, to be incorporated in Future::HTTP proper
 sub decode_content {
     my($body, $headers) = @_;
     my $content_ref = \$body;
