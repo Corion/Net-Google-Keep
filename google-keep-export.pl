@@ -73,6 +73,15 @@ my $urls = $m->add_listener('Network.responseReceived', sub {
 });
 
 $m->get('https://keep.google.com/');
+
+if( $m->uri =~ m!https://accounts.google.com/ServiceLogin! ) {
+    print $m->title,"\n";
+    print $m->uri,"\n";
+    # If we are at the sign-in, we need user interaction :-(
+    print "We need a manual login from Chrome first\n";
+    exit 1;
+};
+
 $m->sleep(5);
 
 # The magic API request for the notes in JSON format is
