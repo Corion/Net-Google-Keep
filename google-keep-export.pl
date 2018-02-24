@@ -3,6 +3,7 @@ use strict;
 use WWW::Mechanize::Chrome;
 use Data::Dumper;
 use Log::Log4perl qw(:easy);
+use JSON qw(decode_json encode_json);
 use Future::HTTP;
 Log::Log4perl->easy_init($ERROR);  # Set priority of root logger to ERROR
 
@@ -97,22 +98,24 @@ $m->sleep(5);
 
 my $ua = Future::HTTP->new();
 for my $req (@{ $urls{ $url }}) {
-    print $req->{ postBody } = $req->{ postBody }->get();
-    print "\n";
-    print Dumper $req->{info}->{params}->{response}->{requestHeaders};
-    print "---\n";
-    
-    # Now replay this from a different UA:
+    my $postbody = $req->{ postBody } = $req->{ postBody }->get();
+    $postbody = decode_json( $postbody );
+    print "Have request body\n";
+
+    #print Dumper $req->{info}->{params}->{response}->{requestHeaders};
     my %headers = %{ $req->{info}->{params}->{response}->{requestHeaders} };
     delete $headers{ $_ } for grep { /^:/ }keys %headers;
+    print "Have request headers\n";
+    #print "---\n";
+
+    # Now replay this from a different UA:
     print "$url\n";
-    print Dumper \%headers;
     print [$ua->http_request('POST' => $url,
-        body => $req->{ postBody },
+        body    => encode_json( $postbody ),
         headers => \%headers,
     )->then( sub {
         my( $body, $headers ) = @_;
-        
+
         $body = decode_content( $body, $headers );
 
         return Future->done($body, $headers);
