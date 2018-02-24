@@ -1,0 +1,6 @@
+
+[![Build Status](https://travis-ci.org/Corion/Net-Google-Keep.svg?branch=master)](https://github.com/Corion/Net-Google-Keep)
+
+# NAME
+
+Net::Google::Keep - access Google Keep notes from Perl
