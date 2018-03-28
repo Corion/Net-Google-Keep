@@ -26,6 +26,19 @@ my $m = WWW::Mechanize::Chrome->new(
     launch_exe => $chrome_default,
     #headless   => 1,
 );
+
+#$m->driver->send_message('Page.addScriptToEvaluateOnNewDocument', source => <<'JS')->get();
+#  // Overwrite the `plugins` property to use a custom getter.
+#  Object.defineProperty(window.navigator, 'languages', {
+#    get: function () { return ['de-DE','de','en-US', 'en'] }
+#  });
+#  Object.defineProperty(navigator, 'plugins', {
+#    // This just needs to have `length > 0` for the current test,
+#    // but we could mock the plugins too if necessary.
+#    get: () => [1, 2, 3, 4, 5],
+#  });
+#JS
+
 $m->agent( 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3346.0 Safari/537.36' );
 
 my %urls;
@@ -77,8 +90,12 @@ my $urls = $m->add_listener('Network.responseReceived', sub {
 });
 
 $m->get('https://keep.google.com/');
+my ($languages,$type) = $m->eval_in_page('navigator.languages');
+print Dumper $languages;
+(my $plugins,$type) = $m->eval_in_page('navigator.plugins');
+print Dumper $plugins;
 
-if( $m->uri =~ m!https://accounts.google.com/ServiceLogin! ) {
+if( $m->uri =~ m!https://accounts.google.com/! ) {
     print $m->title,"\n";
     print $m->uri,"\n";
     # If we are at the sign-in, we need user interaction :-(
@@ -87,6 +104,7 @@ if( $m->uri =~ m!https://accounts.google.com/ServiceLogin! ) {
 };
 
 $m->sleep(5);
+#$m->report_js_errors;
 
 # The magic API request for the notes in JSON format is
 # POST https://clients6.google.com/notes/v1/changes?alt=json&key=xxx
@@ -95,6 +113,12 @@ $m->sleep(5);
 # So, we clone the information we glean from the response(s) above and
 # replay that:
 (my $url) = keys( %urls );
+
+if( ! $url ) {
+    print $m->title,"\n";
+    print $m->uri,"\n";
+    #print $m->content(format => 'html');
+};
 
 my $ua = Future::HTTP->new();
 for my $req (@{ $urls{ $url }}) {
