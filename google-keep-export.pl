@@ -7,6 +7,12 @@ use JSON qw(decode_json encode_json);
 use Future::HTTP;
 Log::Log4perl->easy_init($ERROR);  # Set priority of root logger to ERROR
 
+use Getopt::Long;
+use Pod::Usage;
+GetOptions(
+    'f|outfile=s' => \my $filename,
+) or pod2usage(2);
+
 my $chrome_default;
 if( $^O =~ /mswin/i ) {
     ($chrome_default) = grep { -x $_ }
@@ -134,7 +140,8 @@ for my $req (@{ $urls{ $url }}) {
 
     # Now replay this from a different UA:
     print "$url\n";
-    print [$ua->http_request('POST' => $url,
+
+    my $notes = [$ua->http_request('POST' => $url,
         body    => encode_json( $postbody ),
         headers => \%headers,
     )->then( sub {
@@ -144,6 +151,16 @@ for my $req (@{ $urls{ $url }}) {
 
         return Future->done($body, $headers);
     })->get]->[0];
+
+    my $fh;
+    if( $filename ) {
+        open $fh, '>', $filename
+            or die "Couldn't write to '$filename': $!";
+    } else {
+        $fh = \*STDOUT;
+    };
+    binmode $fh, ':encoding(UTF-8)';
+    print {$fh} $notes;
 };
 
 undef $m;
