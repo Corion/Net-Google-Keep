@@ -290,6 +290,21 @@ sub fetch_html_json {
 my $part = 1;
 my $ua = Future::HTTP->new();
 my $json = JSON->new->utf8->pretty;
+
+sub save_json {
+    my( $tree, $filename ) = @_;
+    my $fh;
+    if( $filename ) {
+        open $fh, '>', $filename
+            or die "Couldn't write to '$filename': $!";
+    } else {
+        $fh = \*STDOUT;
+    };
+    binmode $fh, ':raw';
+    # Pretty-print
+    print {$fh} $json->encode( $tree );
+}
+
 for my $r (@requests) {
     my( $url, $req ) = @$r;
 
@@ -308,22 +323,15 @@ for my $r (@requests) {
     };
 
     $notes = [$notes->get]->[0];
+    $notes = $json->decode( $notes );
 
     # We should merge those instead of overwriting ....
-    my $fh;
+    my $target;
     if( $filename ) {
-
-        my $target = sprintf $filename, $part++;
+        $target = sprintf $filename, $part++;
         print "Writing to $target\n";
-
-        open $fh, '>', $target
-            or die "Couldn't write to '$target': $!";
-    } else {
-        $fh = \*STDOUT;
     };
-    binmode $fh, ':raw';
-    # Pretty-print
-    print {$fh} $json->encode( $json->decode( $notes ));
+    save_json( $notes, $target );
 };
 
 undef $m;
