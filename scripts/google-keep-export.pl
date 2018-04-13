@@ -306,6 +306,7 @@ sub save_json {
     print {$fh} $json->encode( $tree );
 }
 
+my $last_update;
 for my $r (@requests) {
     my( $url, $req ) = @$r;
 
@@ -326,13 +327,17 @@ for my $r (@requests) {
     $notes = [$notes->get]->[0];
     $notes = $json->decode( $notes );
 
-    # We should merge those instead of overwriting ....
-    my $target;
-    if( $filename ) {
-        $target = sprintf $filename, $part++;
-        print "Writing to $target\n";
+    $notes->{nodes} ||= [];
+    if( $last_update ) {
+        $last_update->{nodes} ||= [];
+        $notes->{ nodes } = [ @{ $last_update->{nodes}}, @{ $notes->{ nodes } }];
     };
-    save_json( $notes, $target );
+    $last_update = $notes;
+};
+
+if( $last_update ) {
+    print "Writing to $filename\n";
+    save_json( $last_update, $filename );
 };
 
 undef $m;
