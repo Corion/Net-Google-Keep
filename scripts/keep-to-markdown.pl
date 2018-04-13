@@ -18,7 +18,8 @@ for (@ARGV) {
     
     my %seen;
     for my $item (@items) {
-        print $item->as_markdown;
+        print join "\n", $item->as_markdown;
+        print "\n";
     }
     
 }

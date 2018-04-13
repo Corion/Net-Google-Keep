@@ -155,7 +155,7 @@ sub as_markdown( $self, $list=undef ) {
     };
 
     if( defined $self->title ) {
-        push @result, "=" . $self->title;
+        push @result, "## " . $self->title;
     };
 
     my $vis;
@@ -163,9 +163,9 @@ sub as_markdown( $self, $list=undef ) {
         my $md = '';
         if( $list ) {
             if( $self->checked) {
-                $md = "[x] ";
+                $md = "- [x] ";
             } else {
-                $md = "[ ] ";
+                $md = "- [ ] ";
             };
         };
         $vis = $md . $self->text;
@@ -175,7 +175,7 @@ sub as_markdown( $self, $list=undef ) {
         # https://keep.google.com/media/v2/1syAWkKrT6bU9W79vuccdD6ye-manHTN3hHO3m6DAhvaR-JkIQ3MwkSXwZEiMwdG1o0JHkg/1FqbB9TTNPAcyJD1k9SzOR5cE1lCqzlIrDprGwI7sRLimvqzkjcExYU3CaVHeBb35sDBg6g?accept=image/gif,image/jpeg,image/jpg,image/png,image/webp,audio/aac&sz=3968
         # https://keep.google.com/media/v2/{parentServerId}/{serverId}?accept=image/gif,image/jpeg,image/jpg,image/png,image/webp,audio/aac&sz=3968
         my $url = $self->blob_url;
-        $vis = sprintf "(%s)[%s]", $url, $url;
+        $vis = sprintf "![image](%s)", $url;
 
         # Should we append/keep the extracted text too?!
         # Also, how does Google Keep store the image content?!
@@ -189,8 +189,7 @@ sub as_markdown( $self, $list=undef ) {
         push @result, $e->as_markdown($is_list);
     }
 
-    my $res = join "\n", @result;
-    "$res\n"
+    @result
 }
 
 sub blob_url( $self ) {
