@@ -120,6 +120,7 @@ sub as_markdown( $self ) {
     } elsif( $self->type eq 'BLOB' ) {
 
         # Assume that we are an image?!
+        # https://keep.google.com/media/v2/{parentServerId}/{serverId}?accept=image/gif,image/jpeg,image/jpg,image/png,image/webp,audio/aac&sz=3968
         $vis = "()[]";
 
         # Should we append/keep the extracted text too?!
