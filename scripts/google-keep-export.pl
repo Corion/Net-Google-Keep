@@ -234,7 +234,7 @@ sub extract_json_from_html {
     my @found = $html =~ /$re/g;
     for my $item ( @found ) {
         # de-escape the Javascript to a JSON string
-        $item =~ s!\\x([a-fA-F0-9]{2})!chr(hex($1))!ge;
+        $item =~ s!\\(?:x([a-fA-F0-9]{2})|([\\"'])|([n]))! $1 ? chr(hex($1)) : $2 ? $2 : $3 ? eval "\\$3" : "???" !ge;
     };
     @found
 };
@@ -266,6 +266,8 @@ sub fetch_html_json {
         # <script type="text/javascript" nonce="xxx">preloadUserInfo(JSON.parse('\x7b
         #$body =~ m!<script\s+type="text/javascript"\s+nonce="[^"]+">preloadUserInfo\(JSON.parse\('((?:[^\\']+|\\x[0-9a-fA-F]{2}|\\[\\'])+)'\)!
         my @settings = extract_json_from_html( $body, qr!<script\s+type="text/javascript"\s+nonce="[^"]+">preloadUserInfo\(JSON.parse\('([^']+)'\)! );
+        # We want/need to store that JSON for the settings somewhere
+
         if( ! @notes ) {
             warn "Couldn't find preloaded notes on page";
             return Future->done( '{}', {} )
@@ -274,6 +276,7 @@ sub fetch_html_json {
                 warn "Multiple preloaded item sections";
             };
             $body = $notes[0];
+            $body = sprintf '{ "nodes":%s }', $body;
 
             #warn $body;
 
