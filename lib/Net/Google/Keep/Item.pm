@@ -17,6 +17,7 @@ has 'id' => (
 has 'serverId' => (
     is => 'rw'
 );
+
 has 'parentServerId' => (
     is => 'ro',
 );
@@ -61,6 +62,10 @@ has 'color' => (
 );
 has 'sortValue' => (
     is => 'rw'
+);
+
+has 'checked' => (
+    is => 'rw',
 );
 
 has 'annotationsGroup' => (
@@ -122,7 +127,13 @@ sub as_markdown( $self ) {
 
     my $vis;
     if( $self->type eq 'LIST_ITEM' ) {
-        $vis = "[ ] " . $self->text;
+        my $md;
+        if( $self->checked ) {
+            $md = "[x] ";
+        } else {
+            $md = "[ ] ";
+        };
+        $vis = $md . $self->text;
     } elsif( $self->type eq 'BLOB' ) {
 
         # Assume that we are an image?!
