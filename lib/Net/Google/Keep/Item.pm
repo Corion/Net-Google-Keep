@@ -24,7 +24,6 @@ has 'parentServerId' => (
 
 has 'parentId' => (
     is => 'ro',
-    default => 'root',
 );
 
 has 'type' => (
@@ -33,8 +32,7 @@ has 'type' => (
 );
 
 has 'timestamps' => (
-    is => 'lazy',
-    default => sub { {} },
+    is => 'rw',
 );
 
 has 'title' => (
@@ -47,21 +45,21 @@ has 'baseVersion' => (
     is => 'rw'
 );
 has 'nodeSettings' => (
-    is => 'lazy',
-    default => sub { {} },
+    is => 'rw',
 );
 
 has 'isArchived' => (
     is => 'rw'
 );
 has 'isPinned' => (
-    is => 'rw'
+    is => 'ro'
 );
+
 has 'color' => (
     is => 'rw'
 );
 has 'sortValue' => (
-    is => 'rw'
+    is => 'ro'
 );
 
 has 'checked' => (
@@ -69,13 +67,11 @@ has 'checked' => (
 );
 
 has 'annotationsGroup' => (
-    is => 'lazy',
-    default => sub { {} },
+    is => 'rw',
 );
 
 has 'labelIds' => (
-    is => 'lazy',
-    default => sub { [] },
+    is => 'rw',
 );
 
 has 'lastSavedSessionId' => (
@@ -83,6 +79,42 @@ has 'lastSavedSessionId' => (
 );
 
 has 'lastModifierEmail' => (
+    is => 'rw'
+);
+
+has 'roleInfo' => (
+    is => 'rw'
+);
+
+has 'abuseFeedback' => (
+    is => 'rw'
+);
+
+has 'moved' => (
+    is => 'rw'
+);
+
+has 'shareRequests' => (
+    is => 'rw'
+);
+
+has 'shareState' => (
+    is => 'rw'
+);
+
+has 'reminders' => (
+    is => 'rw'
+);
+
+has 'blob' => (
+    is => 'rw'
+);
+
+has 'extracted_text' => (
+    is => 'rw'
+);
+
+has 'errorStatus' => (
     is => 'rw'
 );
 
@@ -94,7 +126,7 @@ has '_entries' => (
 # We should respect the sort order here
 sub append_entry( $self, $entry ) {
     push @{ $self->_entries }, $entry;
-    @{ $self->_entries } = sort { $b->sortValue <=> $a->sortValue } @{ $self->_entries };
+    @{ $self->_entries } = sort { $b->sortValue || 0 <=> $a->sortValue || 0 } @{ $self->_entries };
 };
 
 sub as_json_keep( $self ) {
@@ -140,6 +172,7 @@ sub as_markdown( $self, $list=undef ) {
     } elsif( $self->type eq 'BLOB' ) {
 
         # Assume that we are an image?!
+        # https://keep.google.com/media/v2/1syAWkKrT6bU9W79vuccdD6ye-manHTN3hHO3m6DAhvaR-JkIQ3MwkSXwZEiMwdG1o0JHkg/1FqbB9TTNPAcyJD1k9SzOR5cE1lCqzlIrDprGwI7sRLimvqzkjcExYU3CaVHeBb35sDBg6g?accept=image/gif,image/jpeg,image/jpg,image/png,image/webp,audio/aac&sz=3968
         # https://keep.google.com/media/v2/{parentServerId}/{serverId}?accept=image/gif,image/jpeg,image/jpg,image/png,image/webp,audio/aac&sz=3968
         my $url = $self->blob_url;
         $vis = sprintf "(%s)[%s]", $url, $url;

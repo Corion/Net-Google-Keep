@@ -35,7 +35,7 @@ has 'json' => (
         my $class = $self->json_class;
         (my( $file ) = $class ) =~ s{::|'}{/}g;
         require "$file.pm"; # dies if the file is not found
-        $class->new( @{ $self->json_options } )
+        $class->new( @{ $self->json_options } )->utf8
     },
 );
 

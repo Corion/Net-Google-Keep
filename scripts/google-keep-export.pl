@@ -3,6 +3,7 @@ use strict;
 use WWW::Mechanize::Chrome;
 use Data::Dumper;
 use Log::Log4perl qw(:easy);
+use Encode 'encode';
 use JSON ();
 use Future::HTTP;
 Log::Log4perl->easy_init($ERROR);  # Set priority of root logger to ERROR
@@ -225,6 +226,7 @@ sub fetch_xhr_json {
         my( $body, $headers ) = @_;
 
         $body = decode_content( $body, $headers );
+        $body = encode 'UTF-8', $body;
 
         return Future->done($body, $headers);
     })
@@ -279,8 +281,6 @@ sub fetch_html_json {
             $body = $notes[0];
             $body = sprintf '{ "nodes":%s }', $body;
 
-            #warn $body;
-
             # return the JSON and the headers
             return Future->done( $body, {} )
         };
@@ -289,7 +289,7 @@ sub fetch_html_json {
 
 my $part = 1;
 my $ua = Future::HTTP->new();
-my $json = JSON->new->pretty;
+my $json = JSON->new->utf8->pretty;
 for my $r (@requests) {
     my( $url, $req ) = @$r;
 
@@ -321,7 +321,7 @@ for my $r (@requests) {
     } else {
         $fh = \*STDOUT;
     };
-    binmode $fh, ':encoding(UTF-8)';
+    binmode $fh, ':raw';
     # Pretty-print
     print {$fh} $json->encode( $json->decode( $notes ));
 };
