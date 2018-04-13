@@ -92,15 +92,29 @@ my $urls = $m->add_listener('Network.responseReceived', sub {
             };
             return Future->done();
         })->else( sub {
-            warn "$url: error: " . Dumper \@_;
-            warn sprintf "(original request id '%s', type '%s')", $id, $info->{params}->{type};
-            #warn Dumper $info->{params};
-            return Future->done();
+            #warn "$url: error: " . Dumper \@_;
+            #warn sprintf "(original request id '%s', type '%s')", $id, $info->{params}->{type};
+            ##warn Dumper $info->{params};
+            #return Future->done();
         });
+    };
+
+    if( $url =~ /ssl.google-analytics.com|ssl.gstatic.com|www.gstatic.com/ ) {
+        # Early out
+        return
+    };
+
+    if( $info->{params}->{response}->{headers}->{"content-type"} =~ m!^image/! ) {
+        # warn "Profile image" if $url =~ m!/photo.jpg$!;
+        warn "[image] $url";
     };
 
     if( $url eq 'https://keep.google.com/' ) {
         # We want this one
+    } elsif( $url =~ m!^https://keep.google.com/.*/media/! ) {
+        # Note this one for later inspection
+        warn "[media] $url";
+        return
     } elsif(    $url !~ /\bclients\d\.google\.com\b/
              or $url !~ m!/notes/!
              or $url !~ /\bchanges\?alt=json\b/
