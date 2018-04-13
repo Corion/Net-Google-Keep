@@ -279,7 +279,7 @@ sub fetch_html_json {
                 warn "Multiple preloaded item sections";
             };
             $body = $notes[0];
-            $body = sprintf '{ "nodes":%s }', $body;
+            $body = sprintf '{ "nodes":%s,"truncated":true,"synthetic":true }', $body;
 
             # return the JSON and the headers
             return Future->done( $body, {} )
