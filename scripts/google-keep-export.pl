@@ -3,7 +3,7 @@ use strict;
 use WWW::Mechanize::Chrome;
 use Data::Dumper;
 use Log::Log4perl qw(:easy);
-use JSON qw(decode_json encode_json);
+use JSON ();
 use Future::HTTP;
 Log::Log4perl->easy_init($ERROR);  # Set priority of root logger to ERROR
 
@@ -215,11 +215,11 @@ sub replay_request {
 sub fetch_xhr_json {
     my( $ua, $url, $req ) = @_;
     my $postbody = $req->{ postBody } = $req->{ postBody }->get();
-    $postbody = decode_json( $postbody );
+    #$postbody = decode_json( $postbody );
     #print "Have request body\n";
 
     return replay_request(
-        $ua, $url, $req, encode_json( $postbody )
+        $ua, $url, $req, $postbody
     )->then( sub {
         my( $body, $headers ) = @_;
 
@@ -288,6 +288,7 @@ sub fetch_html_json {
 
 my $part = 1;
 my $ua = Future::HTTP->new();
+my $json = JSON->new->pretty;
 for my $r (@requests) {
     my( $url, $req ) = @$r;
 
@@ -320,7 +321,8 @@ for my $r (@requests) {
         $fh = \*STDOUT;
     };
     binmode $fh, ':encoding(UTF-8)';
-    print {$fh} $notes;
+    # Pretty-print
+    print {$fh} $json->encode( $json->decode( $notes ));
 };
 
 undef $m;
