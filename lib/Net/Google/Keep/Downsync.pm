@@ -56,7 +56,8 @@ sub inflate_tree( $self, $tree ) {
             push @result, $i;
             $parents{ $item->{id} } = $i;
             
-        } elsif( $item->{type} eq 'LIST_ITEM' ) {
+        } elsif(   $item->{type} eq 'LIST_ITEM'
+                or $item->{type} eq 'BLOB' ) {
             my $i = Net::Google::Keep::Item->new( $item );
             
             # Have we seen the parent already?
@@ -67,6 +68,7 @@ sub inflate_tree( $self, $tree ) {
                 $orphans{ $parentId } ||= [];
                 push @{ $orphans{ $parentId }}, $i;
             };
+
         } else {
             croak "Unknown type '$item->{type}' in tree";
         };
