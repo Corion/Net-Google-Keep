@@ -17,6 +17,10 @@ has 'id' => (
 has 'serverId' => (
     is => 'rw'
 );
+has 'parentServerId' => (
+    is => 'ro',
+);
+
 has 'parentId' => (
     is => 'ro',
     default => 'root',
