@@ -39,6 +39,8 @@ has 'json' => (
     },
 );
 
+# where will we store the settings?
+
 sub inflate_tree( $self, $tree ) {
     my @result;
     # parse out lists, and other stuff

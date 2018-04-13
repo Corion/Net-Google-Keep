@@ -68,22 +68,58 @@ my %seen;
 # the Google Keep application. Most of this can be stored in a config file
 # instead.
 
+my @grep;
+my $grep = 'Autoextract';
+
 my $urls = $m->add_listener('Network.responseReceived', sub {
     my( $info ) = @_;
     my $url = $info->{params}->{response}->{url};
     my $id = $info->{params}->{requestId};
 
-    return unless $url =~ /\bclients\d\.google\.com\b/;
-    return unless $url =~ m!/notes/!;
-    return unless $url =~ /\bchanges\?alt=json\b/;
+    # Search in non-XHR requests for a given string
+    # XHR-requests won't keep the body and thus be will never
+    # be searchable. Yay.
+    # https://bugs.chromium.org/p/chromium/issues/detail?id=457484
+    if( $info->{params}->{type} ne 'XHR' ) {
+        push @grep, $m->searchInResponseBody_future(
+            requestId => $id,
+            query     => $grep
+        )->then( sub {
+            my( @stuff ) = @_;
+            if( @stuff ) {
+                warn $url;
+                warn Dumper \@stuff;
+            };
+            return Future->done();
+        })->else( sub {
+            warn "$url: error: " . Dumper \@_;
+            warn sprintf "(original request id '%s', type '%s')", $id, $info->{params}->{type};
+            #warn Dumper $info->{params};
+            return Future->done();
+        });
+    };
+
+    if( $url eq 'https://keep.google.com/' ) {
+        # We want this one
+    } elsif(    $url !~ /\bclients\d\.google\.com\b/
+             or $url !~ m!/notes/!
+             or $url !~ /\bchanges\?alt=json\b/
+    ) {
+        # An URL that we want to ignore
+        return
+    };
 
     if( ! $seen{$id}++) {
         print "$id> $url\n";
+        # If we have a text/html reply, this is the first part and we need to
+        # extract the first few items (in their native JSON) from that
+        # Maybe we should just have replaced preloadUserInfo() with our
+        # own function to capture the information in a convenient place. Or even
+        # nastier, override JSON.parse(...)
 
         # https://bugs.chromium.org/p/chromium/issues/detail?id=457484
         # getResponseBody does not work for XHRs with "responseType = 'blob'"
-        # So, how will we get at the data from that XHR?!
-        # We need to manually replay the XHR, reproducing all the headers
+        # We need to manually replay the XHR below, reproducing all the headers
         # and the POST body. Yay.
         # I guess we don't even need to do this in an .responseReceived
         # handler and can just do it in a .requestSent handler instead.
@@ -122,6 +158,9 @@ if( $m->uri =~ m!https://accounts.google.com/! ) {
     exit 1;
 };
 
+# Give the page some time to perform its additional requests
+# Maybe later we should find out what in the JSON tells the page to fetch
+# more data
 $m->sleep(5);
 #$m->report_js_errors;
 
