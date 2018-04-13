@@ -61,7 +61,7 @@ my $m = WWW::Mechanize::Chrome->new(
 
 $m->agent( 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3346.0 Safari/537.36' );
 
-my %urls;
+my @requests;
 my %seen;
 
 # This is what we need to find the Google credentials and URLs from
@@ -87,7 +87,6 @@ my $urls = $m->add_listener('Network.responseReceived', sub {
         # and the POST body. Yay.
         # I guess we don't even need to do this in an .responseReceived
         # handler and can just do it in a .requestSent handler instead.
-        $urls{ $url } ||= [];
 
         my $req = {
             info => $info,
@@ -97,7 +96,7 @@ my $urls = $m->add_listener('Network.responseReceived', sub {
         if( $info->{params}->{response}->{requestHeaders}->{":method"} eq 'POST' ) {
             $req->{postBody} = $m->getRequestPostData( $id );
         };
-        push @{ $urls{ $url }}, $req;
+        push @requests, [ $url, $req ];
 
         #$urls{ $url } = $m->getResponseBody( $id )->then( sub {
         #    print Dumper $_[0];
@@ -126,26 +125,25 @@ if( $m->uri =~ m!https://accounts.google.com/! ) {
 $m->sleep(5);
 #$m->report_js_errors;
 
-# The magic API request for the notes in JSON format is
+# The magic API request for the additional notes in JSON format is
 # POST https://clients6.google.com/notes/v1/changes?alt=json&key=xxx
 # But we need the appropriate cookie and other stuff, as a simple GET request
 # doesn't work due to missing authorization
 # So, we clone the information we glean from the response(s) above and
-# replay that:
-(my $url) = keys( %urls );
+# replay that.
 
-if( ! $url ) {
+if( ! @requests ) {
     print $m->title,"\n";
     print $m->uri,"\n";
     #print $m->content(format => 'html');
 };
 
-if( @{ $urls{ $url }} > 1 ) {
+if( @requests > 1 ) {
     print "Will need to merge multiple requests\n";
 };
 
-my $ua = Future::HTTP->new();
-for my $req (@{ $urls{ $url }}) {
+sub fetch_xhr_json {
+    my( $ua, $url, $req ) = @_;
     my $postbody = $req->{ postBody } = $req->{ postBody }->get();
     $postbody = decode_json( $postbody );
     print "Have request body\n";
@@ -155,11 +153,12 @@ for my $req (@{ $urls{ $url }}) {
     delete $headers{ $_ } for grep { /^:/ }keys %headers;
     #print "Have request headers\n";
     #print "---\n";
-
     # Now replay this from a different UA:
+    # Actually, we won't need to replay the request for 'index.html'
+    # as we have the payload already, from above
     print "$url\n";
 
-    my $notes = [$ua->http_request('POST' => $url,
+    return $ua->http_request('POST' => $url,
         body    => encode_json( $postbody ),
         headers => \%headers,
     )->then( sub {
@@ -168,8 +167,84 @@ for my $req (@{ $urls{ $url }}) {
         $body = decode_content( $body, $headers );
 
         return Future->done($body, $headers);
-    })->get]->[0];
+    })
+}
+
+sub extract_json_from_html {
+    my( $html, $re ) = @_;
+    my @found = $html =~ /$re/g;
+    for my $item ( @found ) {
+        # de-escape the Javascript to a JSON string
+        $item =~ s!\\x([a-fA-F0-9]{2})!chr(hex($1))!ge;
+    };
+    @found
+};
+
+sub fetch_html_json {
+    my( $ua, $url, $req ) = @_;
+
+    #my $id = $info->{params}->{requestId};
+    #return $m->getResponseBody( $id )->then( sub {
+
+    # Re-fetch the data using our other UA, just to prepare when we will
+    # go Chrome-less in entirety
+
+    my %headers = %{ $req->{info}->{params}->{response}->{requestHeaders} };
+    delete $headers{ $_ } for grep { /^:/ }keys %headers;
+
+    return $ua->http_request('GET' => $url,
+        #body    => encode_json( $postbody ),
+        headers => \%headers,
+    )->then( sub {
+        # Retrieve the content from the response immediately
+        # instead of re-fetching the information through $ua?!
+        my( $body, $headers ) = @_;
+        $body = decode_content( $body, $headers );
+
+        my @notes = extract_json_from_html( $body, qr/loadChunk\(JSON.parse\('([^']+)'\)/);
+        warn Dumper \@notes;
+
+        # Extract the JSON for the settings
+        # <script type="text/javascript" nonce="xxx">preloadUserInfo(JSON.parse('\x7b
+        #$body =~ m!<script\s+type="text/javascript"\s+nonce="[^"]+">preloadUserInfo\(JSON.parse\('((?:[^\\']+|\\x[0-9a-fA-F]{2}|\\[\\'])+)'\)!
+        my @settings = extract_json_from_html( $body, qr!<script\s+type="text/javascript"\s+nonce="[^"]+">preloadUserInfo\(JSON.parse\('([^']+)'\)! );
+        if( ! @notes ) {
+            warn "Couldn't find preloaded notes on page";
+            return Future->done( '{}', {} )
+        } else {
+            if( @notes > 1 ) {
+                warn "Multiple preloaded item sections";
+            };
+            $body = $notes[0];
+
+            #warn $body;
+
+            # return the JSON and the headers
+            return Future->done( $body, {} )
+        };
+    })
+}
+
 my $part = 1;
+my $ua = Future::HTTP->new();
+for my $r (@requests) {
+    my( $url, $req ) = @$r;
+
+    # If this is the https://keep.google.com/ base URL, re-fetch that and
+    # extract the first few items from that, as they don't exist anywhere else
+    my $notes;
+    my $mimeType = $req->{info}->{params}->{response}->{mimeType};
+    if( 'text/html' eq $mimeType) {
+        $notes = fetch_html_json( $ua, $url => $req );
+
+    } elsif( 'application/json' eq $mimeType) {
+        $notes = fetch_xhr_json( $ua, $url => $req );
+
+    } else {
+        die "Unknown URL content type for URL '$url' : '$mimeType'";
+    };
+
+    $notes = [$notes->get]->[0];
 
     # We should merge those instead of overwriting ....
     my $fh;
