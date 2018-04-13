@@ -6,6 +6,8 @@ use Filter::signatures;
 no warnings 'experimental::signatures';
 use feature 'signatures';
 
+use URI::URL;
+
 has 'kind' => (
     is => 'rw'
 );
@@ -121,7 +123,8 @@ sub as_markdown( $self ) {
 
         # Assume that we are an image?!
         # https://keep.google.com/media/v2/{parentServerId}/{serverId}?accept=image/gif,image/jpeg,image/jpg,image/png,image/webp,audio/aac&sz=3968
-        $vis = "()[]";
+        my $url = $self->blob_url;
+        $vis = sprintf "(%s)[%s]", $url, $url;
 
         # Should we append/keep the extracted text too?!
         # Also, how does Google Keep store the image content?!
@@ -136,6 +139,18 @@ sub as_markdown( $self ) {
 
     my $res = join "\n", @result;
     "$res\n"
+}
+
+sub blob_url( $self ) {
+    if( $self->type eq 'BLOB' ) {
+        # For images at least
+        my $url = 'https://keep.google.com/media/v2/{parentServerId}/{serverId}?accept=image/gif,image/jpeg,image/jpg,image/png,image/webp,audio/aac&sz=3968';
+        $url =~ s!\{(\w+)\}!$self->$1()!ge;
+        return URI::URL->new( $url )
+
+    } else {
+        return undef
+    }
 }
 
 # This is where we store data that doesn't map to MarkDown properly
