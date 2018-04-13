@@ -93,7 +93,8 @@ has '_entries' => (
 
 # We should respect the sort order here
 sub append_entry( $self, $entry ) {
-    push @{ $self->_entries }, $entry
+    push @{ $self->_entries }, $entry;
+    @{ $self->_entries } = sort { $b->sortValue <=> $a->sortValue } @{ $self->_entries };
 };
 
 sub as_json_keep( $self ) {
