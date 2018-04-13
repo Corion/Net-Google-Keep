@@ -113,7 +113,7 @@ sub as_json_keep( $self ) {
     @result
 }
 
-sub as_markdown( $self ) {
+sub as_markdown( $self, $list=undef ) {
     my @result;
 
 
@@ -127,12 +127,14 @@ sub as_markdown( $self ) {
     };
 
     my $vis;
-    if( $self->type eq 'LIST_ITEM' ) {
-        my $md;
-        if( $self->checked ) {
-            $md = "[x] ";
-        } else {
-            $md = "[ ] ";
+    if( $self->type eq 'LIST_ITEM') {
+        my $md = '';
+        if( $list ) {
+            if( $self->checked) {
+                $md = "[x] ";
+            } else {
+                $md = "[ ] ";
+            };
         };
         $vis = $md . $self->text;
     } elsif( $self->type eq 'BLOB' ) {
@@ -149,8 +151,9 @@ sub as_markdown( $self ) {
     }
 
     push @result, $vis if defined $vis;
+    my $is_list = $self->type eq 'LIST';
     for my $e ( @{ $self->_entries }) {
-        push @result, $e->as_markdown;
+        push @result, $e->as_markdown($is_list);
     }
 
     my $res = join "\n", @result;
