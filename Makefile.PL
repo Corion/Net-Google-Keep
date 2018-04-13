@@ -47,6 +47,7 @@ my %module = (
                       }, # e.g., Module::Name => 1.1
     ABSTRACT_FROM   => $main_file, # retrieve abstract from module
     AUTHOR          => 'Max Maischein <corion@cpan.org>',
+    EXE_FILES       => [ glob 'scripts/*.pl' ],
 );
 
 sub get_module_info { %module }
