@@ -179,7 +179,7 @@ if( $m->uri =~ m!https://accounts.google.com/! ) {
 # Maybe later we should find out what in the JSON tells the page to fetch
 # more data
 # If the JSON reply has a "truncated":true entry, we need to fetch more
-$m->sleep(5);
+$m->sleep(15);
 #$m->report_js_errors;
 
 # The magic API request for the additional notes in JSON format is
