@@ -11,7 +11,21 @@ use Getopt::Long;
 use Pod::Usage;
 GetOptions(
     'f|outfile=s' => \my $filename,
+    'help'        => \my $help,
 ) or pod2usage(2);
+pod2usage(1) if $help;
+
+=head1 SYNOPSIS
+
+  google-keep-export.pl -f my-export.json
+
+=head1 OPTIONS
+
+=item B<-f>, B<--outfile>
+
+Name of the output file. If not given, the JSON will be dumped to STDOUT.
+
+=cut
 
 my $chrome_default;
 if( $^O =~ /mswin/i ) {
