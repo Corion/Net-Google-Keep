@@ -17,7 +17,7 @@ pod2usage(1) if $help;
 
 =head1 SYNOPSIS
 
-  google-keep-export.pl -f my-export.json
+  google-keep-export.pl -f my-export-%d.json
 
 =head1 OPTIONS
 
@@ -169,18 +169,17 @@ for my $req (@{ $urls{ $url }}) {
 
         return Future->done($body, $headers);
     })->get]->[0];
+my $part = 1;
 
     # We should merge those instead of overwriting ....
     my $fh;
     if( $filename ) {
 
-        if( -f $filename ) {
-            $filename =~ s!(?:-part-(\d+))?.json!"-part-".($1+1).".json"!e;
-        };
-        print "Writing to $filename\n";
+        my $target = sprintf $filename, $part++;
+        print "Writing to $target\n";
 
-        open $fh, '>', $filename
-            or die "Couldn't write to '$filename': $!";
+        open $fh, '>', $target
+            or die "Couldn't write to '$target': $!";
     } else {
         $fh = \*STDOUT;
     };
