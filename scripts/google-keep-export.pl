@@ -106,7 +106,7 @@ my $urls = $m->add_listener('Network.responseReceived', sub {
     return if $url =~ /^data:/;
 
     my $ct =    $info->{params}->{response}->{headers}->{"content-type"}
-             || $info->{params}->{response}->{headers}->{"Content-Type"};
+             || $info->{params}->{response}->{headers}->{"Content-Type"}
              || '';
     if( $ct =~ m!^image/! ) {
         # warn "Profile image" if $url =~ m!/photo.jpg$!;
