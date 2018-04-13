@@ -181,25 +181,30 @@ if( @requests > 1 ) {
     print "Will need to merge multiple requests\n";
 };
 
+sub replay_request {
+    my( $ua, $url, $req, $body ) = @_;
+
+    my $method = uc $req->{info}->{params}->{response}->{requestHeaders}->{":method"};
+    my %headers = %{ $req->{info}->{params}->{response}->{requestHeaders} };
+    delete $headers{ $_ } for grep { /^:/ }keys %headers;
+
+    # Now replay this from a different UA:
+    print "$url\n";
+
+    return $ua->http_request($method => $url,
+        headers => \%headers,
+        $body ? ( body => $body ) : (),
+    );
+}
+
 sub fetch_xhr_json {
     my( $ua, $url, $req ) = @_;
     my $postbody = $req->{ postBody } = $req->{ postBody }->get();
     $postbody = decode_json( $postbody );
-    print "Have request body\n";
+    #print "Have request body\n";
 
-    #print Dumper $req->{info}->{params}->{response}->{requestHeaders};
-    my %headers = %{ $req->{info}->{params}->{response}->{requestHeaders} };
-    delete $headers{ $_ } for grep { /^:/ }keys %headers;
-    #print "Have request headers\n";
-    #print "---\n";
-    # Now replay this from a different UA:
-    # Actually, we won't need to replay the request for 'index.html'
-    # as we have the payload already, from above
-    print "$url\n";
-
-    return $ua->http_request('POST' => $url,
-        body    => encode_json( $postbody ),
-        headers => \%headers,
+    return replay_request(
+        $ua, $url, $req, encode_json( $postbody )
     )->then( sub {
         my( $body, $headers ) = @_;
 
@@ -231,9 +236,8 @@ sub fetch_html_json {
     my %headers = %{ $req->{info}->{params}->{response}->{requestHeaders} };
     delete $headers{ $_ } for grep { /^:/ }keys %headers;
 
-    return $ua->http_request('GET' => $url,
-        #body    => encode_json( $postbody ),
-        headers => \%headers,
+    return replay_request(
+        $ua, $url, $req
     )->then( sub {
         # Retrieve the content from the response immediately
         # instead of re-fetching the information through $ua?!
@@ -241,7 +245,7 @@ sub fetch_html_json {
         $body = decode_content( $body, $headers );
 
         my @notes = extract_json_from_html( $body, qr/loadChunk\(JSON.parse\('([^']+)'\)/);
-        warn Dumper \@notes;
+        #warn Dumper \@notes;
 
         # Extract the JSON for the settings
         # <script type="text/javascript" nonce="xxx">preloadUserInfo(JSON.parse('\x7b
