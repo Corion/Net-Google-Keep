@@ -103,8 +103,11 @@ my $urls = $m->add_listener('Network.responseReceived', sub {
         # Early out
         return
     };
+    return if $url =~ /^data:/;
 
-    if( $info->{params}->{response}->{headers}->{"content-type"} =~ m!^image/! ) {
+    my $ct =    $info->{params}->{response}->{headers}->{"content-type"}
+             || $info->{params}->{response}->{headers}->{"Content-Type"};
+    if( $ct =~ m!^image/! ) {
         # warn "Profile image" if $url =~ m!/photo.jpg$!;
         warn "[image] $url";
     };
@@ -159,10 +162,10 @@ my $urls = $m->add_listener('Network.responseReceived', sub {
 });
 
 $m->get('https://keep.google.com/');
-my ($languages,$type) = $m->eval_in_page('navigator.languages');
-print Dumper $languages;
-(my $plugins,$type) = $m->eval_in_page('navigator.plugins');
-print Dumper $plugins;
+#my ($languages,$type) = $m->eval_in_page('navigator.languages');
+#print Dumper $languages;
+#(my $plugins,$type) = $m->eval_in_page('navigator.plugins');
+#print Dumper $plugins;
 
 if( $m->uri =~ m!https://accounts.google.com/! ) {
     print $m->title,"\n";
