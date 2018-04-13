@@ -7,3 +7,4 @@ DBIx-RunSQL-*
 MYMETA.*
 .releaserc
 chrome-v66-google-keep-scraper/
+/*.json
