@@ -85,11 +85,11 @@ sub as_json_keep( $self ) {
     my @result;
     my $s = { %$self };
     delete $s->{_entries};
-    
+
     # downconvert labels
     # downconvert nodeSettings
     # downconvert timestamps
-    
+
     push @result, $s;
     for my $e ( @{ $self->_entries }) {
         push @result, $e->as_json_keep;
@@ -99,29 +99,36 @@ sub as_json_keep( $self ) {
 
 sub as_markdown( $self ) {
     my @result;
-    
-    
+
+
     if( $self->parentId eq 'root' ) {
         push @result, '---';
         push @result, $self->frontMatter;
     };
-    
+
     if( defined $self->title ) {
         push @result, "=" . $self->title;
     };
-    
+
     my $vis;
     if( $self->type eq 'LIST_ITEM' ) {
         $vis = "[ ] " . $self->text;
+    } elsif( $self->type eq 'BLOB' ) {
+
+        # Assume that we are an image?!
+        $vis = "()[]";
+
+        # Should we append/keep the extracted text too?!
+        # Also, how does Google Keep store the image content?!
     } else {
         $vis = $self->text;
     }
-    
+
     push @result, $vis if defined $vis;
     for my $e ( @{ $self->_entries }) {
         push @result, $e->as_markdown;
     }
-    
+
     my $res = join "\n", @result;
     "$res\n"
 }
