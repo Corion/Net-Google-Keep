@@ -140,6 +140,10 @@ if( ! $url ) {
     #print $m->content(format => 'html');
 };
 
+if( @{ $urls{ $url }} > 1 ) {
+    print "Will need to merge multiple requests\n";
+};
+
 my $ua = Future::HTTP->new();
 for my $req (@{ $urls{ $url }}) {
     my $postbody = $req->{ postBody } = $req->{ postBody }->get();
@@ -149,7 +153,7 @@ for my $req (@{ $urls{ $url }}) {
     #print Dumper $req->{info}->{params}->{response}->{requestHeaders};
     my %headers = %{ $req->{info}->{params}->{response}->{requestHeaders} };
     delete $headers{ $_ } for grep { /^:/ }keys %headers;
-    print "Have request headers\n";
+    #print "Have request headers\n";
     #print "---\n";
 
     # Now replay this from a different UA:
@@ -166,8 +170,15 @@ for my $req (@{ $urls{ $url }}) {
         return Future->done($body, $headers);
     })->get]->[0];
 
+    # We should merge those instead of overwriting ....
     my $fh;
     if( $filename ) {
+
+        if( -f $filename ) {
+            $filename =~ s!(?:-part-(\d+))?.json!"-part-".($1+1).".json"!e;
+        };
+        print "Writing to $filename\n";
+
         open $fh, '>', $filename
             or die "Couldn't write to '$filename': $!";
     } else {
