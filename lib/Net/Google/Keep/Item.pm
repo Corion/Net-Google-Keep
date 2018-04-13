@@ -71,6 +71,10 @@ has 'lastSavedSessionId' => (
     is => 'rw'
 );
 
+has 'lastModifierEmail' => (
+    is => 'rw'
+);
+
 has '_entries' => (
     is => 'lazy',
     default => sub { [] },
