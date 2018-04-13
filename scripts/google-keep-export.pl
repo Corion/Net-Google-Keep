@@ -176,6 +176,7 @@ if( $m->uri =~ m!https://accounts.google.com/! ) {
 # Give the page some time to perform its additional requests
 # Maybe later we should find out what in the JSON tells the page to fetch
 # more data
+# If the JSON reply has a "truncated":true entry, we need to fetch more
 $m->sleep(5);
 #$m->report_js_errors;
 
