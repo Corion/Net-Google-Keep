@@ -62,7 +62,6 @@ my $m = WWW::Mechanize::Chrome->new(
 $m->agent( 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3346.0 Safari/537.36' );
 
 my @requests;
-my %seen;
 
 # This is what we need to find the Google credentials and URLs from
 # the Google Keep application. Most of this can be stored in a config file
@@ -110,6 +109,7 @@ my $urls = $m->add_listener('Network.responseReceived', sub {
     if( $ct =~ m!^image/! ) {
         # warn "Profile image" if $url =~ m!/photo.jpg$!;
         warn "[image] $url";
+        #warn Dumper $info->{params};
     };
 
     if( $url eq 'https://keep.google.com/' ) {
@@ -126,39 +126,37 @@ my $urls = $m->add_listener('Network.responseReceived', sub {
         return
     };
 
-    if( ! $seen{$id}++) {
-        print "$id> $url\n";
-        # If we have a text/html reply, this is the first part and we need to
-        # extract the first few items (in their native JSON) from that
-        # Maybe we should just have replaced preloadUserInfo() with our
-        # own function to capture the information in a convenient place. Or even
-        # nastier, override JSON.parse(...)
+    print "$id> $url\n";
+    # If we have a text/html reply, this is the first part and we need to
+    # extract the first few items (in their native JSON) from that
+    # Maybe we should just have replaced preloadUserInfo() with our
+    # own function to capture the information in a convenient place. Or even
+    # nastier, override JSON.parse(...)
 
-        # https://bugs.chromium.org/p/chromium/issues/detail?id=457484
-        # getResponseBody does not work for XHRs with "responseType = 'blob'"
-        # We need to manually replay the XHR below, reproducing all the headers
-        # and the POST body. Yay.
-        # I guess we don't even need to do this in an .responseReceived
-        # handler and can just do it in a .requestSent handler instead.
+    # https://bugs.chromium.org/p/chromium/issues/detail?id=457484
+    # getResponseBody does not work for XHRs with "responseType = 'blob'"
+    # We need to manually replay the XHR below, reproducing all the headers
+    # and the POST body. Yay.
+    # I guess we don't even need to do this in an .responseReceived
+    # handler and can just do it in a .requestSent handler instead.
 
-        my $req = {
-            info => $info,
-            postBody => [],
-        };
-
-        if( $info->{params}->{response}->{requestHeaders}->{":method"} eq 'POST' ) {
-            $req->{postBody} = $m->getRequestPostData( $id );
-        };
-        push @requests, [ $url, $req ];
-
-        #$urls{ $url } = $m->getResponseBody( $id )->then( sub {
-        #    print Dumper $_[0];
-        #    print "---";
-        #    Future->done( $_[0]);
-        #})->catch(sub {
-        #    warn Dumper \@_;
-        #});
+    my $req = {
+        info => $info,
+        postBody => [],
     };
+
+    if( $info->{params}->{response}->{requestHeaders}->{":method"} eq 'POST' ) {
+        $req->{postBody} = $m->getRequestPostData( $id );
+    };
+    push @requests, [ $url, $req ];
+
+    #$urls{ $url } = $m->getResponseBody( $id )->then( sub {
+    #    print Dumper $_[0];
+    #    print "---";
+    #    Future->done( $_[0]);
+    #})->catch(sub {
+    #    warn Dumper \@_;
+    #});
 });
 
 $m->get('https://keep.google.com/');
