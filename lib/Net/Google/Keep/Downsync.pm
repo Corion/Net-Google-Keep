@@ -51,7 +51,8 @@ sub inflate_tree( $self, $tree ) {
             # a top-level entry
             my $title = $item->{title} // '<no title>';
             #warn sprintf "%s - %s", $item->{type}, $title;
-            $item->{entries} = (delete( $orphans{ $item->{id}}) || []);
+            my $entries = delete( $orphans{ $item->{id}}) || [];
+            $item->{_entries} = $entries;
             my $i = Net::Google::Keep::Item->new( $item );
             push @result, $i;
             $parents{ $item->{id} } = $i;

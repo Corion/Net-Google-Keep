@@ -328,6 +328,97 @@
          },
          "kind" : "notes#node",
          "roleInfo" : []
+      },
+      {
+         "errorStatus" : [],
+         "shareRequests" : [],
+         "abuseFeedback" : {},
+         "timestamps" : {
+            "created" : "2018-04-15T08:12:24.386Z",
+            "kind" : "notes#timestamps",
+            "updated" : "2018-04-15T08:13:06.177Z"
+         },
+         "serverId" : "1GweiTR1TMD_T-Z0ZSCrbyiRt02iBfzMoEMPmAKvzJo5szA5HaHkEDtmcLqBvIgllIS49Cw",
+         "blob" : {
+            "extraction_status" : "SUCCEEDED",
+            "drawingInfo" : {
+               "drawingId" : "ec45335c-de00-4915-a5f8-49bf7aea39b8",
+               "thumbnailGeneratedTime" : "2018-04-15T08:13:06.177Z",
+               "inkHash" : "ca09a6091d77fb93",
+               "snapshotData" : {
+                  "drawingInfo" : {},
+                  "extracted_text" : "o",
+                  "mimetype" : "image/png",
+                  "is_uploaded" : true,
+                  "type" : "IMAGE",
+                  "extraction_status" : "SUCCEEDED",
+                  "height" : 2048,
+                  "byte_size" : 44141,
+                  "kind" : "notes#blob",
+                  "width" : 1211
+               },
+               "snapshotProtoFprint" : "5151046378547836452",
+               "snapshotFingerprint" : "5151046378547836452"
+            },
+            "extracted_text" : "o",
+            "kind" : "notes#blob",
+            "type" : "DRAWING"
+         },
+         "reminders" : [],
+         "parentServerId" : "11yDvolho6zIHgRYdaSY2bhm-x7AOb5eRnY08iRf8CcfrpRaz5KHkUhAsUC_PgTVifZ8y4g",
+         "labelIds" : [],
+         "type" : "BLOB",
+         "kind" : "notes#node",
+         "roleInfo" : [],
+         "nodeSettings" : {
+            "checkedListItemsPolicy" : "GRAVEYARD",
+            "graveyardState" : "EXPANDED",
+            "newListItemPlacement" : "BOTTOM"
+         },
+         "parentId" : "162c85c5727.908048b85c570566",
+         "id" : "162c85cb4f4.a8776c916a312a51",
+         "annotationsGroup" : {
+            "annotations" : [],
+            "kind" : "notes#annotationsGroup"
+         }
+      },
+      {
+         "lastModifierEmail" : "somebody@example.com",
+         "errorStatus" : [],
+         "isPinned" : false,
+         "reminders" : [],
+         "abuseFeedback" : {},
+         "moved" : "1",
+         "serverId" : "11yDvolho6zIHgRYdaSY2bhm-x7AOb5eRnY08iRf8CcfrpRaz5KHkUhAsUC_PgTVifZ8y4g",
+         "timestamps" : {
+            "recentSharedChangesSeen" : "2018-04-15T08:12:50.221Z",
+            "trashed" : "1970-01-01T00:00:00.000Z",
+            "created" : "2018-04-15T08:12:02.149Z",
+            "userEdited" : "2018-04-15T08:13:04.017Z",
+            "updated" : "2018-04-15T08:13:06.177Z",
+            "kind" : "notes#timestamps"
+         },
+         "title" : "Google Keep Autoextract (drawing)",
+         "shareRequests" : [],
+         "isArchived" : false,
+         "color" : "DEFAULT",
+         "labelIds" : [],
+         "type" : "NOTE",
+         "id" : "162c85c5727.908048b85c570566",
+         "annotationsGroup" : {
+            "annotations" : [],
+            "kind" : "notes#annotationsGroup"
+         },
+         "shareState" : "ACCEPTED",
+         "parentId" : "root",
+         "roleInfo" : [],
+         "nodeSettings" : {
+            "checkedListItemsPolicy" : "GRAVEYARD",
+            "graveyardState" : "EXPANDED",
+            "newListItemPlacement" : "BOTTOM"
+         },
+         "kind" : "notes#node",
+         "sortValue" : "547356672"
       }
    ]
 }
