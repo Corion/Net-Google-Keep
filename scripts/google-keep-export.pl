@@ -221,7 +221,7 @@ sub replay_request {
 sub fetch_xhr_json {
     my( $ua, $url, $req ) = @_;
     my $postbody = $req->{ postBody } = $req->{ postBody }->get();
-    #$postbody = decode_json( $postbody );
+    #warn Dumper $json->decode( $postbody );
     #print "Have request body\n";
 
     return replay_request(
