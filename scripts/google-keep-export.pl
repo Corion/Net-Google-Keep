@@ -339,6 +339,8 @@ if( $last_update ) {
     save_json( $last_update, $filename );
 };
 
+# Here we should then retrieve all blobs too, to save them
+
 undef $m;
 
 # Code taken from HTTP::Message, to be incorporated in Future::HTTP proper
