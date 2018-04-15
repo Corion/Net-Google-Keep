@@ -126,7 +126,7 @@ has '_entries' => (
 # We should respect the sort order here
 sub append_entry( $self, $entry ) {
     push @{ $self->_entries }, $entry;
-    @{ $self->_entries } = sort { $b->sortValue || 0 <=> $a->sortValue || 0 } @{ $self->_entries };
+    @{ $self->_entries } = sort { ($b->sortValue || 0) <=> ($a->sortValue || 0) } @{ $self->_entries };
 };
 
 sub as_json_keep( $self ) {
