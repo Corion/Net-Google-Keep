@@ -199,6 +199,9 @@ if( @requests > 1 ) {
     print "Will need to merge multiple requests\n";
 };
 
+my $ua = Future::HTTP->new();
+my $json = JSON->new->utf8->pretty;
+
 sub replay_request {
     my( $ua, $url, $req, $body ) = @_;
 
@@ -287,10 +290,6 @@ sub fetch_html_json {
         };
     })
 }
-
-my $part = 1;
-my $ua = Future::HTTP->new();
-my $json = JSON->new->utf8->pretty;
 
 sub save_json {
     my( $tree, $filename ) = @_;
