@@ -148,7 +148,7 @@ my $urls = $m->add_listener('Network.responseReceived', sub {
     };
 
     if( $info->{params}->{response}->{requestHeaders}->{":method"} eq 'POST' ) {
-        $req->{postBody} = $m->getRequestPostData( $id );
+        $req->{postBody} = $m->getRequestPostData_future( $id );
     };
     push @requests, [ $url, $req ];
 
