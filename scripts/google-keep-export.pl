@@ -162,6 +162,9 @@ if( $m->uri =~ m!https://accounts.google.com/! ) {
     print $m->uri,"\n";
     # If we are at the sign-in, we need user interaction :-(
     print "We need a manual login from Chrome first\n";
+
+    # Maybe launch the browser in UI mode and ask the user for information?!
+
     exit 1;
 };
 
