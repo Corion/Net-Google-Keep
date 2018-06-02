@@ -8,6 +8,8 @@ use JSON ();
 use Future::HTTP;
 Log::Log4perl->easy_init($ERROR);  # Set priority of root logger to ERROR
 
+use Net::Google::Keep::Downsync;
+
 use Getopt::Long;
 use Pod::Usage;
 GetOptions(
@@ -328,6 +330,13 @@ if( $last_update ) {
 };
 
 # Here we should then retrieve all blobs too, to save them
+my $p = Net::Google::Keep::Downsync->new();
+my @items = $p->parse( tree => $last_update );
+for my $i (@items) {
+    for my $url ($i->externalReferences) {
+        print "GET $url\n";
+    };
+};
 
 undef $m;
 
