@@ -28,20 +28,8 @@ Name of the output file. If not given, the JSON will be dumped to STDOUT.
 
 =cut
 
-my $chrome_default;
-if( $^O =~ /mswin/i ) {
-    ($chrome_default) = grep { -x $_ }
-                        #map  { "$_\\Google\\Chrome\\Application\\chrome.exe" }
-                        map  { "$_/chrome.exe" }
-                        grep { defined $_ && -d $_ }
-                        ('chrome-v66-google-keep-scraper',
-                         $ENV{"ProgramFiles"},
-                         $ENV{"ProgramFiles(x86)"},
-                         $ENV{"ProgramFilesW6432"},
-                        );
-} else {
-    $chrome_default = undef;
-};
+my $chrome_default = WWW::Mechanize::Chrome->find_executable(undef, 'chrome-v66-google-keep-scraper');
+die "Chrome executable not found in path" unless $chrome_default;
 
 my $m = WWW::Mechanize::Chrome->new(
     launch_exe => $chrome_default,
