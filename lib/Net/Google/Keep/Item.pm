@@ -204,6 +204,12 @@ sub blob_url( $self ) {
     }
 }
 
+sub externalReferences( $self ) {
+    grep { defined $_ }
+    map { $_->blob_url }
+    @{ $self->_entries }
+}
+
 # This is where we store data that doesn't map to MarkDown properly
 # like timestamps, labels etc.
 sub frontMatter( $self ) {
