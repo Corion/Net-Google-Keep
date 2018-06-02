@@ -180,6 +180,7 @@ $m->sleep(15);
 # replay that.
 
 if( ! @requests ) {
+    print "Didn't capture any requests.\n";
     print $m->title,"\n";
     print $m->uri,"\n";
     #print $m->content(format => 'html');
