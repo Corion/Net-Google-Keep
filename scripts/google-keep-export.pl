@@ -6,6 +6,7 @@ use Log::Log4perl qw(:easy);
 use Encode 'encode';
 use JSON ();
 use Future::HTTP;
+use POSIX 'strftime';
 Log::Log4perl->easy_init($ERROR);  # Set priority of root logger to ERROR
 
 use Net::Google::Keep::Downsync;
@@ -20,7 +21,9 @@ pod2usage(1) if $help;
 
 =head1 SYNOPSIS
 
-  google-keep-export.pl -f my-export-%d.json
+  google-keep-export.pl
+
+  google-keep-export.pl -f google-keep-backup.json
 
 =head1 OPTIONS
 
@@ -29,6 +32,10 @@ pod2usage(1) if $help;
 Name of the output file. If not given, the JSON will be dumped to STDOUT.
 
 =cut
+
+if( ! defined $filename ) {
+    $filename = strftime 'google-keep-%Y%m%d.json', localtime;
+}
 
 my $chrome_default = WWW::Mechanize::Chrome->find_executable(undef, 'chrome-v66-google-keep-scraper');
 die "Chrome executable not found in path" unless $chrome_default;
