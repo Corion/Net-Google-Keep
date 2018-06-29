@@ -97,9 +97,8 @@ sub as_json_keep( $self ) {
     @result
 }
 
-sub as_markdown( $self ) {
+sub as_markdown( $self, $prefix = '' ) {
     my @result;
-    
     
     if( $self->parentId eq 'root' ) {
         push @result, '---';
@@ -112,14 +111,22 @@ sub as_markdown( $self ) {
     
     my $vis;
     if( $self->type eq 'LIST_ITEM' ) {
-        $vis = "[ ] " . $self->text;
+        $vis = "$prefix[ ] " . $self->text;
     } else {
-        $vis = $self->text;
+        my $t = $self->text;
+        # Indent by $prefix
+        $t =~ s!^!$prefix!gm;
+        $vis = $t;
     }
     
     push @result, $vis if defined $vis;
     for my $e ( @{ $self->_entries }) {
-        push @result, $e->as_markdown;
+        # How can we indent stuff here?!
+        # Currently only indent stuff if we are list items?!
+        if( $self->type eq 'LIST_ITEM' ) {
+            $prefix = "    $prefix";
+        };
+        push @result, $e->as_markdown();
     }
     
     my $res = join "\n", @result;
