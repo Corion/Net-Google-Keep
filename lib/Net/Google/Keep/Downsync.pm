@@ -35,9 +35,11 @@ has 'json' => (
         my $class = $self->json_class;
         (my( $file ) = $class ) =~ s{::|'}{/}g;
         require "$file.pm"; # dies if the file is not found
-        $class->new( @{ $self->json_options } )
+        $class->new( @{ $self->json_options } )->utf8
     },
 );
+
+# where will we store the settings?
 
 sub inflate_tree( $self, $tree ) {
     my @result;
@@ -49,12 +51,14 @@ sub inflate_tree( $self, $tree ) {
             # a top-level entry
             my $title = $item->{title} // '<no title>';
             #warn sprintf "%s - %s", $item->{type}, $title;
-            $item->{entries} = (delete( $orphans{ $item->{id}}) || []);
+            my $entries = delete( $orphans{ $item->{id}}) || [];
+            $item->{_entries} = $entries;
             my $i = Net::Google::Keep::Item->new( $item );
             push @result, $i;
             $parents{ $item->{id} } = $i;
             
-        } elsif( $item->{type} eq 'LIST_ITEM' ) {
+        } elsif(   $item->{type} eq 'LIST_ITEM'
+                or $item->{type} eq 'BLOB' ) {
             my $i = Net::Google::Keep::Item->new( $item );
             
             # Have we seen the parent already?
@@ -65,6 +69,7 @@ sub inflate_tree( $self, $tree ) {
                 $orphans{ $parentId } ||= [];
                 push @{ $orphans{ $parentId }}, $i;
             };
+
         } else {
             croak "Unknown type '$item->{type}' in tree";
         };

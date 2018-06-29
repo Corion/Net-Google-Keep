@@ -8,3 +8,4 @@ MYMETA.*
 .releaserc
 chrome-v66-google-keep-scraper/
 /*.json
+/Net-Google-Keep-*

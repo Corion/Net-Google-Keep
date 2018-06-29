@@ -4,3 +4,8 @@
 # NAME
 
 Net::Google::Keep - access Google Keep notes from Perl
+
+# SETUP
+
+Currently this needs a Chrome instance signed into Google (Keep) to get at the
+paths and cookies.

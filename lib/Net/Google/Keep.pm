@@ -15,3 +15,9 @@ paths and cookies.
 our $VERSION = '0.01';
 
 1;
+
+=head1 SEE ALSO
+
+L<https://github.com/kiwiz/gkeepapi>
+
+=cut

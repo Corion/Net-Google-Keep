@@ -6,6 +6,8 @@ use Filter::signatures;
 no warnings 'experimental::signatures';
 use feature 'signatures';
 
+use URI::URL;
+
 has 'kind' => (
     is => 'rw'
 );
@@ -15,9 +17,13 @@ has 'id' => (
 has 'serverId' => (
     is => 'rw'
 );
+
+has 'parentServerId' => (
+    is => 'ro',
+);
+
 has 'parentId' => (
     is => 'ro',
-    default => 'root',
 );
 
 has 'type' => (
@@ -26,8 +32,7 @@ has 'type' => (
 );
 
 has 'timestamps' => (
-    is => 'lazy',
-    default => sub { {} },
+    is => 'rw',
 );
 
 has 'title' => (
@@ -40,34 +45,76 @@ has 'baseVersion' => (
     is => 'rw'
 );
 has 'nodeSettings' => (
-    is => 'lazy',
-    default => sub { {} },
+    is => 'rw',
 );
 
 has 'isArchived' => (
     is => 'rw'
 );
 has 'isPinned' => (
-    is => 'rw'
+    is => 'ro'
 );
+
 has 'color' => (
     is => 'rw'
 );
 has 'sortValue' => (
-    is => 'rw'
+    is => 'ro'
+);
+
+has 'checked' => (
+    is => 'rw',
 );
 
 has 'annotationsGroup' => (
-    is => 'lazy',
-    default => sub { {} },
+    is => 'rw',
 );
 
 has 'labelIds' => (
-    is => 'lazy',
-    default => sub { [] },
+    is => 'rw',
 );
 
 has 'lastSavedSessionId' => (
+    is => 'rw'
+);
+
+has 'lastModifierEmail' => (
+    is => 'rw'
+);
+
+has 'roleInfo' => (
+    is => 'rw'
+);
+
+has 'abuseFeedback' => (
+    is => 'rw'
+);
+
+has 'moved' => (
+    is => 'rw'
+);
+
+has 'shareRequests' => (
+    is => 'rw'
+);
+
+has 'shareState' => (
+    is => 'rw'
+);
+
+has 'reminders' => (
+    is => 'rw'
+);
+
+has 'blob' => (
+    is => 'rw'
+);
+
+has 'extracted_text' => (
+    is => 'rw'
+);
+
+has 'errorStatus' => (
     is => 'rw'
 );
 
@@ -78,18 +125,19 @@ has '_entries' => (
 
 # We should respect the sort order here
 sub append_entry( $self, $entry ) {
-    push @{ $self->_entries }, $entry
+    push @{ $self->_entries }, $entry;
+    @{ $self->_entries } = sort { ($b->sortValue || 0) <=> ($a->sortValue || 0) } @{ $self->_entries };
 };
 
 sub as_json_keep( $self ) {
     my @result;
     my $s = { %$self };
     delete $s->{_entries};
-    
+
     # downconvert labels
     # downconvert nodeSettings
     # downconvert timestamps
-    
+
     push @result, $s;
     for my $e ( @{ $self->_entries }) {
         push @result, $e->as_json_keep;
@@ -97,40 +145,76 @@ sub as_json_keep( $self ) {
     @result
 }
 
-sub as_markdown( $self, $prefix = '' ) {
+sub as_markdown( $self, $is_list=undef, $prefix = '' ) {
     my @result;
     
     if( $self->parentId eq 'root' ) {
         push @result, '---';
         push @result, $self->frontMatter;
     };
-    
+
     if( defined $self->title ) {
-        push @result, "=" . $self->title;
+        push @result, "## " . $self->title;
     };
-    
+
     my $vis;
     if( $self->type eq 'LIST_ITEM' ) {
-        $vis = "$prefix[ ] " . $self->text;
+        my $md = '';
+        if( $is_list ) {
+            if( $self->checked) {
+                $md = "$prefix- [x] ";
+            } else {
+                $md = "$prefix- [ ] ";
+            };
+        };
+        $vis = $md . $self->text;
+    } elsif( $self->type eq 'BLOB' ) {
+
+        # Assume that we are an image?!
+        # https://keep.google.com/media/v2/1syAWkKrT6bU9W79vuccdD6ye-manHTN3hHO3m6DAhvaR-JkIQ3MwkSXwZEiMwdG1o0JHkg/1FqbB9TTNPAcyJD1k9SzOR5cE1lCqzlIrDprGwI7sRLimvqzkjcExYU3CaVHeBb35sDBg6g?accept=image/gif,image/jpeg,image/jpg,image/png,image/webp,audio/aac&sz=3968
+        # https://keep.google.com/media/v2/{parentServerId}/{serverId}?accept=image/gif,image/jpeg,image/jpg,image/png,image/webp,audio/aac&sz=3968
+        my $url = $self->blob_url;
+        $vis = sprintf "![image](%s)", $url;
+
+        # Should we append/keep the extracted text too?!
+        # Also, how does Google Keep store the image content?!
     } else {
         my $t = $self->text;
         # Indent by $prefix
         $t =~ s!^!$prefix!gm;
         $vis = $t;
     }
-    
+
     push @result, $vis if defined $vis;
+    my $is_list = $self->type eq 'LIST';
     for my $e ( @{ $self->_entries }) {
         # How can we indent stuff here?!
         # Currently only indent stuff if we are list items?!
         if( $self->type eq 'LIST_ITEM' ) {
             $prefix = "    $prefix";
         };
-        push @result, $e->as_markdown();
+        push @result, $e->as_markdown($is_list, $prefix);
     }
-    
-    my $res = join "\n", @result;
-    "$res\n"
+
+    @result
+}
+
+sub blob_url( $self ) {
+    if( $self->type eq 'BLOB' ) {
+        # For images at least
+        my $url = 'https://keep.google.com/media/v2/{parentServerId}/{serverId}?accept=image/gif,image/jpeg,image/jpg,image/png,image/webp,audio/aac&sz=3968';
+        $url =~ s!\{(\w+)\}!$self->$1()!ge;
+        return URI::URL->new( $url )
+
+    } else {
+        return undef
+    }
+}
+
+sub externalReferences( $self ) {
+    grep { defined $_ }
+    map { $_->blob_url }
+    @{ $self->_entries }
 }
 
 # This is where we store data that doesn't map to MarkDown properly
