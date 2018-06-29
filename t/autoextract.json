@@ -419,6 +419,444 @@
          },
          "kind" : "notes#node",
          "sortValue" : "547356672"
+      },
+      {
+         "kind" : "notes#node",
+         "errorStatus" : [],
+         "annotationsGroup" : {
+            "annotations" : [],
+            "kind" : "notes#annotationsGroup"
+         },
+         "type" : "LIST",
+         "abuseFeedback" : {},
+         "shareRequests" : [],
+         "reminders" : [],
+         "nodeSettings" : {
+            "checkedListItemsPolicy" : "GRAVEYARD",
+            "newListItemPlacement" : "BOTTOM",
+            "graveyardState" : "EXPANDED"
+         },
+         "moved" : "1",
+         "shareState" : "ACCEPTED",
+         "roleInfo" : [],
+         "isArchived" : false,
+         "timestamps" : {
+            "trashed" : "1970-01-01T00:00:00.000Z",
+            "updated" : "2018-06-26T05:12:59.442Z",
+            "recentSharedChangesSeen" : "2018-06-26T05:12:25.907Z",
+            "userEdited" : "2018-06-08T08:34:33.776Z",
+            "created" : "2018-06-08T08:31:50.621Z",
+            "kind" : "notes#timestamps"
+         },
+         "parentId" : "root",
+         "color" : "DEFAULT",
+         "lastModifierEmail" : "somebody@example.com",
+         "labelIds" : [],
+         "isPinned" : false,
+         "serverId" : "1xpjubnHnyepHqqnrM5CQ3PImLc9m2ndjJkMs3Z5AFvof4b6z6asSaE_pXOnkthlS",
+         "sortValue" : "571473920",
+         "title" : "Google Keep Autoextract (indented list)",
+         "id" : "1528446687601.1235046561"
+      },
+      {
+         "timestamps" : {
+            "updated" : "2018-06-08T08:34:05.668Z",
+            "created" : "2018-06-08T08:33:53.222Z",
+            "kind" : "notes#timestamps"
+         },
+         "checked" : true,
+         "roleInfo" : [],
+         "parentId" : "1528446687601.1235046561",
+         "text" : "Sub item 3.2 (checked)",
+         "serverId" : "1lVgBCWpl4zBGm_s-KPvwtrm_NcUzymF2Iy81lWWzWF_vxnb08K1_FST0b7DzLE4",
+         "labelIds" : [],
+         "id" : "1528446818549.266986475",
+         "superListItemServerId" : "1TUsvsPOf7y5Pq0Qev24FYii4HKf4orMZkUJZltIY1-6Z0MiQyeV6qzjZgm2Rnk7c",
+         "sortValue" : "-5941930",
+         "errorStatus" : [],
+         "kind" : "notes#node",
+         "annotationsGroup" : {
+            "annotations" : [],
+            "kind" : "notes#annotationsGroup"
+         },
+         "parentServerId" : "1xpjubnHnyepHqqnrM5CQ3PImLc9m2ndjJkMs3Z5AFvof4b6z6asSaE_pXOnkthlS",
+         "abuseFeedback" : {},
+         "type" : "LIST_ITEM",
+         "nodeSettings" : {
+            "graveyardState" : "EXPANDED",
+            "checkedListItemsPolicy" : "GRAVEYARD",
+            "newListItemPlacement" : "BOTTOM"
+         },
+         "baseVersion" : "3",
+         "reminders" : [],
+         "superListItemId" : "1528446767269.1087531527",
+         "shareRequests" : []
+      },
+      {
+         "superListItemServerId" : "149azFJY_Kog9gazhgi2x5gUt6o6OrEE4ECOS40dlr4WOSvQqQcX6zaz3_9o0hIA",
+         "sortValue" : "-1572864",
+         "id" : "1528446718553.639407922",
+         "labelIds" : [],
+         "serverId" : "18yCCQfjfwPTO5US0gEO2ATJKVRv-2kIcMd1SrjsuDweGKz-VAi9nLd3WdOTbtxU",
+         "text" : "Sub item 2",
+         "parentId" : "1528446687601.1235046561",
+         "checked" : false,
+         "timestamps" : {
+            "updated" : "2018-06-08T08:32:35.992Z",
+            "kind" : "notes#timestamps",
+            "created" : "2018-06-08T08:32:30.901Z"
+         },
+         "roleInfo" : [],
+         "shareRequests" : [],
+         "superListItemId" : "1528446700848.388685303",
+         "reminders" : [],
+         "baseVersion" : "2",
+         "nodeSettings" : {
+            "graveyardState" : "EXPANDED",
+            "checkedListItemsPolicy" : "GRAVEYARD",
+            "newListItemPlacement" : "BOTTOM"
+         },
+         "type" : "LIST_ITEM",
+         "abuseFeedback" : {},
+         "parentServerId" : "1xpjubnHnyepHqqnrM5CQ3PImLc9m2ndjJkMs3Z5AFvof4b6z6asSaE_pXOnkthlS",
+         "annotationsGroup" : {
+            "kind" : "notes#annotationsGroup",
+            "annotations" : []
+         },
+         "kind" : "notes#node",
+         "errorStatus" : []
+      },
+      {
+         "checked" : false,
+         "timestamps" : {
+            "updated" : "2018-06-08T08:34:23.790Z",
+            "created" : "2018-06-08T08:34:18.815Z",
+            "kind" : "notes#timestamps"
+         },
+         "roleInfo" : [],
+         "parentId" : "1528446687601.1235046561",
+         "text" : "Sub item 4.1",
+         "serverId" : "1OcsivY97EvdCHAGTvSIe1X1XZfVJAN1usHUqStzy0_7n7mzlOZzMUaHwPeUhFgBm",
+         "labelIds" : [],
+         "id" : "1528446843986.1746997351",
+         "superListItemServerId" : "1FZg8LfU0eehxhH9dnSX3jP-SD7s4E_W03Y8FRayLT6W_Y1SSVQuoUY6AWT0NJtkG",
+         "sortValue" : "-7514794",
+         "errorStatus" : [],
+         "kind" : "notes#node",
+         "annotationsGroup" : {
+            "kind" : "notes#annotationsGroup",
+            "annotations" : []
+         },
+         "parentServerId" : "1xpjubnHnyepHqqnrM5CQ3PImLc9m2ndjJkMs3Z5AFvof4b6z6asSaE_pXOnkthlS",
+         "abuseFeedback" : {},
+         "type" : "LIST_ITEM",
+         "baseVersion" : "2",
+         "nodeSettings" : {
+            "graveyardState" : "EXPANDED",
+            "newListItemPlacement" : "BOTTOM",
+            "checkedListItemsPolicy" : "GRAVEYARD"
+         },
+         "shareRequests" : [],
+         "superListItemId" : "1528446825013.1002127067",
+         "reminders" : []
+      },
+      {
+         "shareRequests" : [],
+         "reminders" : [],
+         "baseVersion" : "3",
+         "nodeSettings" : {
+            "graveyardState" : "EXPANDED",
+            "newListItemPlacement" : "BOTTOM",
+            "checkedListItemsPolicy" : "GRAVEYARD"
+         },
+         "type" : "LIST_ITEM",
+         "abuseFeedback" : {},
+         "parentServerId" : "1xpjubnHnyepHqqnrM5CQ3PImLc9m2ndjJkMs3Z5AFvof4b6z6asSaE_pXOnkthlS",
+         "annotationsGroup" : {
+            "kind" : "notes#annotationsGroup",
+            "annotations" : []
+         },
+         "kind" : "notes#node",
+         "errorStatus" : [],
+         "sortValue" : "-6990506",
+         "id" : "1528446825013.1002127067",
+         "labelIds" : [],
+         "serverId" : "1FZg8LfU0eehxhH9dnSX3jP-SD7s4E_W03Y8FRayLT6W_Y1SSVQuoUY6AWT0NJtkG",
+         "text" : "Top item 4",
+         "parentId" : "1528446687601.1235046561",
+         "roleInfo" : [],
+         "timestamps" : {
+            "kind" : "notes#timestamps",
+            "created" : "2018-06-08T08:34:11.339Z",
+            "updated" : "2018-06-08T08:34:16.391Z"
+         },
+         "checked" : false
+      },
+      {
+         "annotationsGroup" : {
+            "annotations" : [],
+            "kind" : "notes#annotationsGroup"
+         },
+         "parentServerId" : "1xpjubnHnyepHqqnrM5CQ3PImLc9m2ndjJkMs3Z5AFvof4b6z6asSaE_pXOnkthlS",
+         "errorStatus" : [],
+         "kind" : "notes#node",
+         "baseVersion" : "5",
+         "nodeSettings" : {
+            "newListItemPlacement" : "BOTTOM",
+            "checkedListItemsPolicy" : "GRAVEYARD",
+            "graveyardState" : "EXPANDED"
+         },
+         "shareRequests" : [],
+         "superListItemId" : "1528446700848.388685303",
+         "reminders" : [],
+         "abuseFeedback" : {},
+         "type" : "LIST_ITEM",
+         "parentId" : "1528446687601.1235046561",
+         "roleInfo" : [],
+         "timestamps" : {
+            "kind" : "notes#timestamps",
+            "created" : "2018-06-08T08:32:06.840Z",
+            "updated" : "2018-06-08T08:32:28.511Z"
+         },
+         "checked" : false,
+         "id" : "1528446714764.2302166",
+         "sortValue" : "-524288",
+         "superListItemServerId" : "149azFJY_Kog9gazhgi2x5gUt6o6OrEE4ECOS40dlr4WOSvQqQcX6zaz3_9o0hIA",
+         "text" : "Sub item1",
+         "serverId" : "1WqWwij3O5Jtcu4pZN3QvkeFm1UJ5uOve-JWCd84hTBwmXCjFlDJyUhjTmZsY",
+         "labelIds" : []
+      },
+      {
+         "labelIds" : [],
+         "serverId" : "1J70SlNv2HuOMcNOqKkjo05SVxG0YoATB2ebd1U63yCbovP9k0pJhk8HfwJXP8rw",
+         "text" : "Sub item 2.2 (checked)",
+         "sortValue" : "-4194304",
+         "superListItemServerId" : "1kUvCVbXcN8uJiqFdOFKfP1I9uUq_pqDSazISXOQwY9kPdLDOHoOHlhpB7U4jon4",
+         "id" : "1528446760196.140008747",
+         "roleInfo" : [],
+         "checked" : true,
+         "timestamps" : {
+            "updated" : "2018-06-08T08:33:30.682Z",
+            "created" : "2018-06-08T08:32:56.037Z",
+            "kind" : "notes#timestamps"
+         },
+         "parentId" : "1528446687601.1235046561",
+         "type" : "LIST_ITEM",
+         "abuseFeedback" : {},
+         "superListItemId" : "1528446742543.909678176",
+         "reminders" : [],
+         "shareRequests" : [],
+         "baseVersion" : "4",
+         "nodeSettings" : {
+            "graveyardState" : "EXPANDED",
+            "checkedListItemsPolicy" : "GRAVEYARD",
+            "newListItemPlacement" : "BOTTOM"
+         },
+         "kind" : "notes#node",
+         "errorStatus" : [],
+         "parentServerId" : "1xpjubnHnyepHqqnrM5CQ3PImLc9m2ndjJkMs3Z5AFvof4b6z6asSaE_pXOnkthlS",
+         "annotationsGroup" : {
+            "annotations" : [],
+            "kind" : "notes#annotationsGroup"
+         }
+      },
+      {
+         "errorStatus" : [],
+         "kind" : "notes#node",
+         "annotationsGroup" : {
+            "kind" : "notes#annotationsGroup",
+            "annotations" : []
+         },
+         "parentServerId" : "1xpjubnHnyepHqqnrM5CQ3PImLc9m2ndjJkMs3Z5AFvof4b6z6asSaE_pXOnkthlS",
+         "abuseFeedback" : {},
+         "type" : "LIST_ITEM",
+         "nodeSettings" : {
+            "graveyardState" : "EXPANDED",
+            "newListItemPlacement" : "BOTTOM",
+            "checkedListItemsPolicy" : "GRAVEYARD"
+         },
+         "baseVersion" : "3",
+         "shareRequests" : [],
+         "superListItemId" : "1528446825013.1002127067",
+         "reminders" : [],
+         "roleInfo" : [],
+         "checked" : false,
+         "timestamps" : {
+            "kind" : "notes#timestamps",
+            "created" : "2018-06-08T08:34:26.274Z",
+            "updated" : "2018-06-08T08:34:33.776Z"
+         },
+         "parentId" : "1528446687601.1235046561",
+         "text" : "Sub item 4.2",
+         "serverId" : "1W_uC6qOsUNY5sGgUEYPpHDl-lurY6IsnFTEtffzI7ECJYvYFCT8sEIKTMMASW-8",
+         "labelIds" : [],
+         "id" : "1528446851091.524137064",
+         "sortValue" : "-8563370",
+         "superListItemServerId" : "1FZg8LfU0eehxhH9dnSX3jP-SD7s4E_W03Y8FRayLT6W_Y1SSVQuoUY6AWT0NJtkG"
+      },
+      {
+         "superListItemId" : "1528446742543.909678176",
+         "reminders" : [],
+         "shareRequests" : [],
+         "nodeSettings" : {
+            "checkedListItemsPolicy" : "GRAVEYARD",
+            "newListItemPlacement" : "BOTTOM",
+            "graveyardState" : "EXPANDED"
+         },
+         "baseVersion" : "2",
+         "type" : "LIST_ITEM",
+         "abuseFeedback" : {},
+         "parentServerId" : "1xpjubnHnyepHqqnrM5CQ3PImLc9m2ndjJkMs3Z5AFvof4b6z6asSaE_pXOnkthlS",
+         "annotationsGroup" : {
+            "annotations" : [],
+            "kind" : "notes#annotationsGroup"
+         },
+         "kind" : "notes#node",
+         "errorStatus" : [],
+         "sortValue" : "-3145728",
+         "superListItemServerId" : "1kUvCVbXcN8uJiqFdOFKfP1I9uUq_pqDSazISXOQwY9kPdLDOHoOHlhpB7U4jon4",
+         "id" : "1528446750575.1573582995",
+         "labelIds" : [],
+         "text" : "Sub item 2.1",
+         "serverId" : "1nxZ3v4eA9lAMb02vCdFTiJ1X5eSDP1iXliF61bTTCwIfn9WsMsowIXXMLIKriZwg",
+         "parentId" : "1528446687601.1235046561",
+         "roleInfo" : [],
+         "timestamps" : {
+            "created" : "2018-06-08T08:32:48.611Z",
+            "kind" : "notes#timestamps",
+            "updated" : "2018-06-08T08:33:08.534Z"
+         },
+         "checked" : false
+      },
+      {
+         "baseVersion" : "3",
+         "nodeSettings" : {
+            "checkedListItemsPolicy" : "GRAVEYARD",
+            "newListItemPlacement" : "BOTTOM",
+            "graveyardState" : "EXPANDED"
+         },
+         "shareRequests" : [],
+         "superListItemId" : "1528446767269.1087531527",
+         "reminders" : [],
+         "abuseFeedback" : {},
+         "type" : "LIST_ITEM",
+         "annotationsGroup" : {
+            "annotations" : [],
+            "kind" : "notes#annotationsGroup"
+         },
+         "parentServerId" : "1xpjubnHnyepHqqnrM5CQ3PImLc9m2ndjJkMs3Z5AFvof4b6z6asSaE_pXOnkthlS",
+         "errorStatus" : [],
+         "kind" : "notes#node",
+         "id" : "1528446812105.1510374798",
+         "sortValue" : "-5592405",
+         "superListItemServerId" : "1TUsvsPOf7y5Pq0Qev24FYii4HKf4orMZkUJZltIY1-6Z0MiQyeV6qzjZgm2Rnk7c",
+         "text" : "Sub item 3.1 (unchecked)",
+         "serverId" : "1--fQ6ykosN2Y9qAbVb86xWwChrmrt-kctn2m0VBI0x60eBDQ4MCaAFLR0DDeEhSf",
+         "labelIds" : [],
+         "parentId" : "1528446687601.1235046561",
+         "roleInfo" : [],
+         "checked" : true,
+         "timestamps" : {
+            "updated" : "2018-06-08T08:34:05.668Z",
+            "kind" : "notes#timestamps",
+            "created" : "2018-06-08T08:33:48.188Z"
+         }
+      },
+      {
+         "annotationsGroup" : {
+            "kind" : "notes#annotationsGroup",
+            "annotations" : []
+         },
+         "parentServerId" : "1xpjubnHnyepHqqnrM5CQ3PImLc9m2ndjJkMs3Z5AFvof4b6z6asSaE_pXOnkthlS",
+         "errorStatus" : [],
+         "kind" : "notes#node",
+         "nodeSettings" : {
+            "graveyardState" : "EXPANDED",
+            "checkedListItemsPolicy" : "GRAVEYARD",
+            "newListItemPlacement" : "BOTTOM"
+         },
+         "baseVersion" : "4",
+         "shareRequests" : [],
+         "reminders" : [],
+         "abuseFeedback" : {},
+         "type" : "LIST_ITEM",
+         "parentId" : "1528446687601.1235046561",
+         "checked" : false,
+         "timestamps" : {
+            "updated" : "2018-06-08T08:33:35.781Z",
+            "kind" : "notes#timestamps",
+            "created" : "2018-06-08T08:32:38.464Z"
+         },
+         "roleInfo" : [],
+         "id" : "1528446742543.909678176",
+         "sortValue" : "-2621440",
+         "text" : "Top item 2  (unchecked)",
+         "serverId" : "1kUvCVbXcN8uJiqFdOFKfP1I9uUq_pqDSazISXOQwY9kPdLDOHoOHlhpB7U4jon4",
+         "labelIds" : []
+      },
+      {
+         "sortValue" : "0",
+         "id" : "1528446700848.388685303",
+         "labelIds" : [],
+         "text" : "Top item",
+         "serverId" : "149azFJY_Kog9gazhgi2x5gUt6o6OrEE4ECOS40dlr4WOSvQqQcX6zaz3_9o0hIA",
+         "parentId" : "1528446687601.1235046561",
+         "roleInfo" : [],
+         "timestamps" : {
+            "created" : "2018-06-08T08:32:04.331Z",
+            "kind" : "notes#timestamps",
+            "updated" : "2018-06-08T08:32:04.331Z"
+         },
+         "checked" : false,
+         "shareRequests" : [],
+         "reminders" : [],
+         "nodeSettings" : {
+            "checkedListItemsPolicy" : "GRAVEYARD",
+            "newListItemPlacement" : "BOTTOM",
+            "graveyardState" : "EXPANDED"
+         },
+         "baseVersion" : "1",
+         "type" : "LIST_ITEM",
+         "abuseFeedback" : {},
+         "parentServerId" : "1xpjubnHnyepHqqnrM5CQ3PImLc9m2ndjJkMs3Z5AFvof4b6z6asSaE_pXOnkthlS",
+         "annotationsGroup" : {
+            "kind" : "notes#annotationsGroup",
+            "annotations" : []
+         },
+         "kind" : "notes#node",
+         "errorStatus" : []
+      },
+      {
+         "parentId" : "1528446687601.1235046561",
+         "timestamps" : {
+            "kind" : "notes#timestamps",
+            "created" : "2018-06-08T08:33:40.660Z",
+            "updated" : "2018-06-08T08:34:05.668Z"
+         },
+         "checked" : true,
+         "roleInfo" : [],
+         "id" : "1528446767269.1087531527",
+         "sortValue" : "-5242880",
+         "text" : "Top item 3 (checked)",
+         "serverId" : "1TUsvsPOf7y5Pq0Qev24FYii4HKf4orMZkUJZltIY1-6Z0MiQyeV6qzjZgm2Rnk7c",
+         "labelIds" : [],
+         "annotationsGroup" : {
+            "annotations" : [],
+            "kind" : "notes#annotationsGroup"
+         },
+         "parentServerId" : "1xpjubnHnyepHqqnrM5CQ3PImLc9m2ndjJkMs3Z5AFvof4b6z6asSaE_pXOnkthlS",
+         "errorStatus" : [],
+         "kind" : "notes#node",
+         "nodeSettings" : {
+            "checkedListItemsPolicy" : "GRAVEYARD",
+            "newListItemPlacement" : "BOTTOM",
+            "graveyardState" : "EXPANDED"
+         },
+         "baseVersion" : "2",
+         "reminders" : [],
+         "shareRequests" : [],
+         "abuseFeedback" : {},
+         "type" : "LIST_ITEM"
       }
    ]
 }

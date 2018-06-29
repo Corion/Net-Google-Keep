@@ -118,6 +118,14 @@ has 'errorStatus' => (
     is => 'rw'
 );
 
+has 'superListItemServerId' => (
+    is => 'rw',
+);
+
+has 'superListItemId' => (
+    is => 'rw',
+);
+
 has '_entries' => (
     is => 'lazy',
     default => sub { [] },
@@ -159,6 +167,9 @@ sub as_markdown( $self, $is_list=undef, $prefix = '' ) {
 
     my $vis;
     if( $self->type eq 'LIST_ITEM' ) {
+        if( $self->superListItemId ) {
+            $prefix .= '    ';
+        };
         my $md = '';
         if( $is_list ) {
             if( $self->checked) {
@@ -168,6 +179,7 @@ sub as_markdown( $self, $is_list=undef, $prefix = '' ) {
             };
         };
         $vis = $md . $self->text;
+
     } elsif( $self->type eq 'BLOB' ) {
 
         # Assume that we are an image?!
