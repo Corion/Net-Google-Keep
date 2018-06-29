@@ -186,7 +186,7 @@ sub as_markdown( $self, $is_list=undef, $prefix = '' ) {
     }
 
     push @result, $vis if defined $vis;
-    my $is_list = $self->type eq 'LIST';
+    $is_list ||= $self->type eq 'LIST';
     for my $e ( @{ $self->_entries }) {
         # How can we indent stuff here?!
         # Currently only indent stuff if we are list items?!
