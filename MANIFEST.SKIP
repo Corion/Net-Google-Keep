@@ -13,3 +13,5 @@ CVS/
 ^blibdirs$
 .bak$
 ^MYMETA.*
+^google-keep-.*.json
+^chrome-.*/
